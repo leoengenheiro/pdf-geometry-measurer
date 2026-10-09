@@ -1,4 +1,70 @@
-PyMuPDF==1.24.10
-opencv-python==4.10.0.84
-numpy==2.1.2
-Pillow==11.0.0
+# PDF Geometry Measurer
+
+Projeto Python para ler PDFs, identificar figuras geométricas e realizar medições em unidades reais.
+
+Ele permite:
+- extrair páginas de um PDF
+- converter páginas para imagens
+- detectar formas geométricas (círculo, retângulo, triângulo e polígonos)
+- calcular área, perímetro e distância
+- exportar imagens com anotações visuais
+
+## Dependências
+
+- Python 3.10+
+- OpenCV
+- PyMuPDF
+- NumPy
+
+## Instalação
+
+```bash
+python -m venv .venv
+source .venv/bin/activate   # Linux/macOS
+# ou .venv\Scripts\activate  # Windows
+pip install -r requirements.txt
+```
+
+## Executar com um PDF real
+
+```bash
+python pdf_geometry_measurer.py --pdf exemplo.pdf --scale 0.1 --unit mm --output-dir output
+```
+
+## Executar o exemplo simples
+
+```bash
+python example.py
+```
+
+## Como funciona
+
+- O PDF é convertido em imagens por página.
+- O algoritmo usa contornos em OpenCV para detectar formas.
+- Cada forma é medida em pixels e convertida para a unidade escolhida.
+- O valor de `--scale` define a conversão: por exemplo, `0.1` significa 1 pixel = 0,1 unidade.
+
+## Exemplo de uso em Python
+
+```python
+from pdf_geometry_measurer import GeometryMeasurer
+
+measurer = GeometryMeasurer(scale_factor=0.1, unit='mm')
+report = measurer.analyze_pdf('exemplo.pdf', 'output')
+
+for page in report:
+    print(page['page'], page['num_shapes'])
+    for shape in page['shapes']:
+        print(shape['name'], shape['area'])
+```
+
+## Observações
+
+- A medição é mais confiável em desenhos com bordas bem definidas.
+- PDFs com texto e imagens misturados podem exigir pré-processamento.
+- Para aplicações industriais, uma escala calibrada do próprio desenho é recomendada para maior precisão.
+
+## Licença
+
+MIT
+
